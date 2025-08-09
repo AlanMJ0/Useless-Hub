@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#3730a3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e1b4b;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="sparkle" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#e0e7ff;stop-opacity:0.7" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="15" fill="url(#bg)" stroke="#ffffff" stroke-width="0.5" opacity="0.95"/>
+  
+  <!-- Central spinning element (like a hub) -->
+  <circle cx="16" cy="16" r="4" fill="url(#sparkle)" stroke="#ffffff" stroke-width="0.5"/>
+  
+  <!-- Radiating spokes (representing the "useless" apps) -->
+  <g stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" opacity="0.8">
+    <line x1="16" y1="6" x2="16" y2="10" />
+    <line x1="22.6" y1="9.4" x2="19.8" y2="12.2" />
+    <line x1="26" y1="16" x2="22" y2="16" />
+    <line x1="22.6" y1="22.6" x2="19.8" y2="19.8" />
+    <line x1="16" y1="26" x2="16" y2="22" />
+    <line x1="9.4" y1="22.6" x2="12.2" y2="19.8" />
+    <line x1="6" y1="16" x2="10" y2="16" />
+    <line x1="9.4" y1="9.4" x2="12.2" y2="12.2" />
+  </g>
+  
+  <!-- Small decorative circles at the end of spokes -->
+  <g fill="url(#sparkle)" opacity="0.9">
+    <circle cx="16" cy="6" r="1.5" />
+    <circle cx="22.6" cy="9.4" r="1.5" />
+    <circle cx="26" cy="16" r="1.5" />
+    <circle cx="22.6" cy="22.6" r="1.5" />
+    <circle cx="16" cy="26" r="1.5" />
+    <circle cx="9.4" cy="22.6" r="1.5" />
+    <circle cx="6" cy="16" r="1.5" />
+    <circle cx="9.4" cy="9.4" r="1.5" />
+  </g>
+  
+  <!-- Subtle "?" symbol in center to represent the randomness/uselessness -->
+  <text x="16" y="19" text-anchor="middle" fill="#1e1b4b" font-family="Arial, sans-serif" font-size="6" font-weight="bold">?</text>
+</svg>

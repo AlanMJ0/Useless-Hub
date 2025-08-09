@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, RotateCcw } from "lucide-react";
 
 export default function BubbleWrap() {
@@ -39,69 +39,84 @@ export default function BubbleWrap() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-fun p-6">
-      <div className="mx-auto max-w-2xl">
-        <Card className="p-8 bg-white/95 backdrop-blur-sm shadow-glow">
-          <div className="mb-6">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => window.location.href = "/"}
-              className="mb-4"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="mb-8">
+          <Button
+            variant="outline"
+            asChild
+            className="bg-white/20 hover:bg-white/30 text-white border-white/20"
+          >
+            <a href="/">
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Back to Hub
-            </Button>
-          </div>
+            </a>
+          </Button>
+        </div>
 
-          <div className="text-center mb-8">
-            <h1 className="text-3xl font-bold text-primary mb-4">Virtual Bubble Wrap</h1>
-            <p className="text-muted-foreground mb-4">
-              The stress relief you never knew you needed
-            </p>
-            
-            <div className="text-lg font-semibold text-accent mb-2">
-              {getSatisfactionLevel()}
-            </div>
-            <div className="text-sm text-muted-foreground">
-              Popped: {poppedCount} / {bubbles.length}
-            </div>
-          </div>
+        <div className="text-center mb-12">
+          <h1 className="text-5xl font-bold text-white mb-4 drop-shadow-lg">
+            🫧 Virtual Bubble Wrap
+          </h1>
+          <p className="text-xl text-white/90 max-w-2xl mx-auto drop-shadow">
+            Experience the therapeutic joy of popping bubbles without the mess. Premium stress relief.
+          </p>
+        </div>
 
-          <div className="grid grid-cols-7 gap-2 mb-8 justify-center">
-            {bubbles.map((bubble) => (
-              <button
-                key={bubble.id}
-                onClick={() => popBubble(bubble.id)}
-                className={`
-                  w-12 h-12 rounded-full border-2 transition-all duration-200
-                  ${bubble.popped 
-                    ? 'bg-muted border-muted text-muted-foreground scale-75' 
-                    : 'bg-gradient-primary border-primary/30 hover:scale-110 hover:shadow-glow active:scale-95'
-                  }
-                `}
-                disabled={bubble.popped}
+        <Card className="bg-white/10 backdrop-blur border-white/20">
+          <CardHeader>
+            <CardTitle className="text-white text-center text-2xl">
+              Stress Relief Simulator 3000
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="text-center">
+              <div className="text-2xl font-bold text-white mb-2">
+                {getSatisfactionLevel()}
+              </div>
+              <div className="text-white/80">
+                Popped: {poppedCount} / {bubbles.length} bubbles
+              </div>
+            </div>
+
+            <div className="grid grid-cols-7 gap-3 mb-8 justify-center">
+              {bubbles.map((bubble) => (
+                <button
+                  key={bubble.id}
+                  onClick={() => popBubble(bubble.id)}
+                  className={`
+                    w-12 h-12 rounded-full border-2 transition-all duration-200 text-lg
+                    ${bubble.popped 
+                      ? 'bg-slate-700/50 border-slate-600 text-slate-500 scale-75' 
+                      : 'bg-blue-500/80 border-blue-400/50 hover:scale-110 hover:bg-blue-400/90 active:scale-95 text-white shadow-lg hover:shadow-blue-500/50'
+                    }
+                  `}
+                  disabled={bubble.popped}
+                >
+                  {bubble.popped ? '💥' : '●'}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex gap-4 justify-center">
+              <Button
+                onClick={resetBubbles}
+                variant="outline"
+                size="lg"
+                className="bg-white/20 hover:bg-white/30 text-white border-white/20"
               >
-                {bubble.popped ? '💥' : '●'}
-              </button>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Button
-              onClick={resetBubbles}
-              variant="outline"
-              className="w-full max-w-xs"
-            >
-              <RotateCcw className="h-4 w-4 mr-2" />
-              Reset Bubble Wrap
-            </Button>
-          </div>
-
-          <div className="mt-6 text-center text-xs text-muted-foreground">
-            No real bubbles were harmed in the making of this entertainment.
-          </div>
+                <RotateCcw className="mr-2 h-5 w-5" />
+                Reset Bubble Wrap
+              </Button>
+            </div>
+          </CardContent>
         </Card>
+
+        <div className="text-center mt-8">
+          <p className="text-white/70">
+            "Therapeutic bubble popping without the cleanup!" 🎈
+          </p>
+        </div>
       </div>
     </div>
   );

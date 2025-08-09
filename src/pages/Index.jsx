@@ -82,13 +82,6 @@ const uselessApps = [
     category: "Security"
   },
   {
-    name: "Progress Bar",
-    description: "Watch a bar progress to 100% for no reason",
-    path: "/progress-bar",
-    icon: "📊",
-    category: "Visual"
-  },
-  {
     name: "Text Reverser",
     description: "Reverse text because backwards is better",
     path: "/text-reverser",
@@ -107,7 +100,18 @@ const uselessApps = [
 export default function Index() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [isSpinning, setIsSpinning] = useState(false);
+  const [selectedGradient, setSelectedGradient] = useState('');
   const carouselRef = useRef(null);
+
+  // Available gradient classes
+  const gradientClasses = [
+    'gradient-aurora',
+    'gradient-cosmic', 
+    'gradient-neon',
+    'gradient-electric',
+    'gradient-sunset',
+    'gradient-matrix'
+  ];
 
   // Keyboard accessibility
   useEffect(() => {
@@ -129,10 +133,15 @@ export default function Index() {
     
     setIsSpinning(true);
     setSelectedProject(null);
+    setSelectedGradient('');
     
     // Random project selection
     const randomIndex = Math.floor(Math.random() * uselessApps.length);
     const selectedApp = uselessApps[randomIndex];
+    
+    // Random gradient selection
+    const randomGradientIndex = Math.floor(Math.random() * gradientClasses.length);
+    const selectedGradientClass = gradientClasses[randomGradientIndex];
     
     // Animation duration and easing
     const animationDuration = 3000; // 3 seconds
@@ -159,6 +168,7 @@ export default function Index() {
       } else {
         // Animation complete - navigate directly to the selected project
         setSelectedProject(selectedApp);
+        setSelectedGradient(selectedGradientClass);
         setIsSpinning(false);
         
         // Announce to screen readers
@@ -219,10 +229,14 @@ export default function Index() {
         </div>
 
         {/* Horizontal Carousel for Random Selection */}
-        <div className="mb-12 overflow-hidden">
+        <div className="mb-12 relative z-10 bg-slate-800/30 backdrop-blur-md rounded-2xl border border-slate-600/50 shadow-2xl p-6 pt-16 pb-16">
+          <div className="text-center mb-4 relative z-10">
+            <h3 className="text-xl font-semibold text-white mb-2">🎯 Project Selection Carousel</h3>
+            <p className="text-slate-300 text-sm">Watch the selection process in action</p>
+          </div>
           <div 
             ref={carouselRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
+            className="flex gap-4 overflow-x-auto scrollbar-hide py-8 relative z-20"
             style={{ 
               scrollBehavior: isSpinning ? 'auto' : 'smooth',
               scrollbarWidth: 'none',
@@ -234,19 +248,35 @@ export default function Index() {
               uselessApps.map((app, index) => (
                 <div
                   key={`${cycleIndex}-${index}`}
-                  className={`flex-shrink-0 w-48 transition-all duration-500 ${
+                  className={`flex-shrink-0 w-48 transition-all duration-500 relative ${
                     selectedProject && selectedProject.name === app.name && !isSpinning
-                      ? 'transform scale-110 project-glow ring-4 ring-white/90 ring-offset-4 ring-offset-slate-900'
+                      ? 'transform scale-125 project-glow ring-4 ring-white/90 ring-offset-4 ring-offset-slate-900 shadow-2xl z-[200] m-4'
                       : selectedProject && selectedProject.name !== app.name && !isSpinning
-                      ? 'opacity-30'
-                      : 'opacity-100'
+                      ? 'opacity-30 z-20'
+                      : 'opacity-100 z-30'
                   }`}
+                  style={{
+                    zIndex: selectedProject && selectedProject.name === app.name && !isSpinning ? 200 : 30,
+                    margin: selectedProject && selectedProject.name === app.name && !isSpinning ? '16px' : '4px'
+                  }}
                 >
-                  <Card className="bg-slate-800/40 border-slate-700/50 hover:border-blue-500/50 backdrop-blur-sm cursor-pointer">
+                  <Card className={`border-slate-600/50 hover:border-blue-500/50 backdrop-blur-sm cursor-pointer hover:shadow-xl transition-all duration-300 relative overflow-visible ${
+                    selectedProject && selectedProject.name === app.name && !isSpinning
+                      ? `border-white/80 z-[210] neon-border-selected ${selectedGradient}`
+                      : 'bg-slate-800/60 z-40'
+                  }`}>
                     <CardContent className="p-4 text-center">
                       <div className="text-4xl mb-2">{app.icon}</div>
-                      <div className="text-white font-medium text-sm">{app.name}</div>
-                      <div className="text-slate-400 text-xs mt-1">{app.category}</div>
+                      <div className={`font-medium text-sm ${
+                        selectedProject && selectedProject.name === app.name && !isSpinning
+                          ? 'text-white font-bold drop-shadow-lg'
+                          : 'text-white'
+                      }`}>{app.name}</div>
+                      <div className={`text-xs mt-1 ${
+                        selectedProject && selectedProject.name === app.name && !isSpinning
+                          ? 'text-white/90 font-semibold drop-shadow'
+                          : 'text-slate-400'
+                      }`}>{app.category}</div>
                     </CardContent>
                   </Card>
                 </div>

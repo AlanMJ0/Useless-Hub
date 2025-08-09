@@ -283,3 +283,115 @@ All colors MUST be HSL.
     0 0 40px rgba(255, 255, 255, 0.4),
     0 0 60px rgba(255, 255, 255, 0.2);
 }
+
+/* Neon gradient border for selected projects */
+.neon-border-selected {
+  position: relative;
+  border: 4px solid transparent;
+  border-radius: 12px;
+  background: linear-gradient(white, white) padding-box,
+              linear-gradient(45deg, 
+                #ff006e, 
+                #8338ec, 
+                #3a86ff, 
+                #06ffa5, 
+                #ffbe0b, 
+                #fb5607, 
+                #ff006e
+              ) border-box;
+  animation: neon-pulse 2s ease-in-out infinite;
+  margin: 8px;
+  overflow: visible;
+}
+
+@keyframes neon-pulse {
+  0%, 100% {
+    box-shadow: 
+      0 0 20px rgba(255, 0, 110, 0.8),
+      0 0 40px rgba(131, 56, 236, 0.6),
+      0 0 60px rgba(58, 134, 255, 0.4),
+      0 0 80px rgba(6, 255, 165, 0.3),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+  50% {
+    box-shadow: 
+      0 0 30px rgba(255, 0, 110, 1),
+      0 0 60px rgba(131, 56, 236, 0.8),
+      0 0 90px rgba(58, 134, 255, 0.6),
+      0 0 120px rgba(6, 255, 165, 0.4),
+      inset 0 0 30px rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Cool animated gradient backgrounds for selected projects */
+.gradient-aurora {
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
+  animation: aurora-shift 3s ease infinite;
+}
+
+.gradient-cosmic {
+  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  animation: cosmic-shift 4s ease infinite;
+}
+
+.gradient-neon {
+  background: linear-gradient(-45deg, #ff0081, #ff8c00, #40e0d0, #ee82ee);
+  background-size: 400% 400%;
+  animation: neon-shift 2.5s ease infinite;
+}
+
+.gradient-electric {
+  background: linear-gradient(-45deg, #00d4ff, #090979, #ff006e, #8338ec);
+  background-size: 400% 400%;
+  animation: electric-shift 3.5s ease infinite;
+}
+
+.gradient-sunset {
+  background: linear-gradient(-45deg, #ff9a9e, #fecfef, #fecfef, #ff9a9e);
+  background-size: 400% 400%;
+  animation: sunset-shift 4s ease infinite;
+}
+
+.gradient-matrix {
+  background: linear-gradient(-45deg, #00ff41, #00d4aa, #00ff88, #00e676);
+  background-size: 400% 400%;
+  animation: matrix-shift 2s ease infinite;
+}
+
+@keyframes aurora-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes cosmic-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes neon-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes electric-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes sunset-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes matrix-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}

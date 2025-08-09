@@ -138,7 +138,7 @@ const ProgressBar = () => {
         <div className="text-center mt-8">
           <Button
             onClick={() => window.location.href = "/"}
-            className="bg-slate-700 hover:bg-slate-600 text-white"
+            className="bg-slate-600 hover:bg-slate-500 text-white border border-white/20"
           >
             Back to Hub
           </Button>

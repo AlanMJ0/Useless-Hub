@@ -47,7 +47,7 @@ export default function Hub() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <div className="text-white/80">Apps Created: 11</div>
+                <div className="text-white/80">Apps Created: 13</div>
                 <div className="text-white/80">Time Wasted: ∞ hours</div>
                 <div className="text-white/80">Productivity Lost: 100%</div>
                 <div className="text-white/80">Fun Factor: Maximum</div>

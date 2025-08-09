@@ -5,7 +5,7 @@ import { ArrowLeft, Play, Pause } from "lucide-react";
 
 export default function FakeLoading() {
   const [progress, setProgress] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [loadingText, setLoadingText] = useState("Ready to load nothing...");
   const [completedLoads, setCompletedLoads] = useState(0);
 
@@ -21,6 +21,13 @@ export default function FakeLoading() {
     "Optimizing nothingness...",
     "Finalizing useless data...",
   ];
+
+  useEffect(() => {
+    // Start loading automatically when component mounts
+    setIsLoading(true);
+    setProgress(0);
+    setLoadingText("Initializing uselessness...");
+  }, []);
 
   useEffect(() => {
     let interval = null;
@@ -47,19 +54,7 @@ export default function FakeLoading() {
       }, Math.random() * 200 + 100); // Random interval between 100-300ms
     }
     return () => clearInterval(interval);
-  }, [isLoading, progress]);
-
-  const startLoading = () => {
-    setProgress(0);
-    setIsLoading(true);
-    setLoadingText("Initializing uselessness...");
-  };
-
-  const stopLoading = () => {
-    setIsLoading(false);
-    setLoadingText("Loading interrupted (nothing was lost)");
-  };
-
+  }, [isLoading, progress, loadingMessages]);
   const reset = () => {
     setProgress(0);
     setIsLoading(false);
@@ -73,11 +68,11 @@ export default function FakeLoading() {
           <Button
             variant="outline"
             asChild
-            className="bg-white/20 hover:bg-white/30 text-white border-white/20"
+            className="bg-white/40 hover:bg-white/60 text-yellow-100 border-white/40"
           >
             <a href="/">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to Home
+              Back to Hub
             </a>
           </Button>
         </div>
@@ -121,28 +116,6 @@ export default function FakeLoading() {
                 </div>
 
                 <div className="flex gap-4 justify-center">
-                  {!isLoading ? (
-                    <Button
-                      onClick={startLoading}
-                      size="lg"
-                      disabled={progress === 100}
-                      className="bg-white/20 hover:bg-white/30 text-white border-white/20 transition-all hover:scale-105"
-                    >
-                      <Play className="mr-2 h-5 w-5" />
-                      Start Loading
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={stopLoading}
-                      size="lg"
-                      variant="outline"
-                      className="bg-white/20 hover:bg-white/30 text-white border-white/20"
-                    >
-                      <Pause className="mr-2 h-5 w-5" />
-                      Stop Loading
-                    </Button>
-                  )}
-                  
                   <Button
                     onClick={reset}
                     variant="outline"
@@ -154,8 +127,9 @@ export default function FakeLoading() {
                 </div>
 
                 {isLoading && (
-                  <div className="flex justify-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+                  <div className="flex flex-col items-center justify-center mt-6">
+                    <div className="animate-spin rounded-full h-16 w-16 border-b-4 border-white"></div>
+                    <div className="mt-2 text-white text-lg font-semibold">Loading...</div>
                   </div>
                 )}
               </CardContent>
@@ -195,7 +169,6 @@ export default function FakeLoading() {
             </Card>
           </div>
         </div>
-
         <div className="text-center mt-8">
           <p className="text-white/70">
             "Patience is a virtue, especially when waiting for nothing!" 🚀

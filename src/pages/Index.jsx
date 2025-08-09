@@ -1,14 +1,9 @@
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Shuffle, ExternalLink } from "lucide-react";
 
 const uselessApps = [
-  {
-    name: "Hub",
-    description: "Central command for all your useless needs",
-    path: "/hub",
-    icon: "🏠",
-    category: "Navigation"
-  },
   {
     name: "Click Counter",
     description: "Count your clicks, because why not?",
@@ -110,6 +105,80 @@ const uselessApps = [
 ];
 
 export default function Index() {
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [isSpinning, setIsSpinning] = useState(false);
+  const carouselRef = useRef(null);
+
+  // Keyboard accessibility
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === ' ' || event.key === 'Enter') {
+        if (event.target.closest('.random-selector-button')) {
+          event.preventDefault();
+          selectRandomProject();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const selectRandomProject = () => {
+    if (isSpinning) return;
+    
+    setIsSpinning(true);
+    setSelectedProject(null);
+    
+    // Random project selection
+    const randomIndex = Math.floor(Math.random() * uselessApps.length);
+    const selectedApp = uselessApps[randomIndex];
+    
+    // Animation duration and easing
+    const animationDuration = 3000; // 3 seconds
+    const startTime = Date.now();
+    
+    const animate = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / animationDuration, 1);
+      
+      // Ease-out animation curve
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      
+      if (carouselRef.current) {
+        // Calculate scroll position with multiple full cycles plus final position
+        const fullCycles = 3; // Number of complete cycles through all projects
+        const totalScroll = (fullCycles * uselessApps.length + randomIndex) * 200; // 200px per card
+        const currentScroll = totalScroll * easeOut;
+        
+        carouselRef.current.scrollLeft = currentScroll;
+      }
+      
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        // Animation complete - navigate directly to the selected project
+        setSelectedProject(selectedApp);
+        setIsSpinning(false);
+        
+        // Announce to screen readers
+        const announcement = `Navigating to ${selectedApp.name}: ${selectedApp.description}`;
+        const ariaLiveRegion = document.createElement('div');
+        ariaLiveRegion.setAttribute('aria-live', 'polite');
+        ariaLiveRegion.setAttribute('aria-atomic', 'true');
+        ariaLiveRegion.className = 'sr-only';
+        ariaLiveRegion.textContent = announcement;
+        document.body.appendChild(ariaLiveRegion);
+        
+        // Navigate to the selected project after a brief delay to show the selection
+        setTimeout(() => {
+          window.location.href = selectedApp.path;
+        }, 1000);
+      }
+    };
+    
+    requestAnimationFrame(animate);
+  };
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 p-6">
       <div className="max-w-7xl mx-auto">
@@ -117,44 +186,73 @@ export default function Index() {
           <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg">
             Useless Hub
           </h1>
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed mb-8">
             Welcome to the ultimate collection of completely pointless but oddly satisfying applications. 
             Because sometimes you need to waste time productively.
           </p>
-          <div className="mt-6 text-slate-400">
+          
+          {/* Random Project Selector */}
+          <div className="mb-8">
+            <Button
+              onClick={selectRandomProject}
+              disabled={isSpinning}
+              className={`random-selector-button bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-xl transition-all duration-300 focus:ring-4 focus:ring-blue-500/50 focus:outline-none ${
+                isSpinning ? 'animate-pulse scale-95' : 'hover:scale-105 hover:shadow-2xl'
+              }`}
+              aria-label={isSpinning ? 'Selecting random project' : 'Pick a random project to explore'}
+              aria-describedby="random-selector-help"
+            >
+              <Shuffle className={`mr-3 h-6 w-6 ${isSpinning ? 'animate-spin' : ''}`} />
+              {isSpinning ? 'Selecting Your Adventure...' : 'Pick Random Project'}
+            </Button>
+            
+            <div id="random-selector-help" className="sr-only">
+              Press Enter or Space to select a random project and navigate automatically.
+            </div>
+          </div>
+          
+          <div className="text-slate-400">
             <span className="bg-slate-800/50 px-3 py-1 rounded-full text-sm">
               {uselessApps.length} Useless Apps Available
             </span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {uselessApps.map((app) => (
-            <Card key={app.name} className="group hover:scale-105 transition-all duration-300 bg-slate-800/40 border-slate-700/50 hover:border-blue-500/50 backdrop-blur-sm hover:shadow-xl hover:shadow-blue-500/10">
-              <CardHeader className="pb-3">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="text-3xl">{app.icon}</div>
-                  <span className="text-xs text-slate-400 bg-slate-700/50 px-2 py-1 rounded">
-                    {app.category}
-                  </span>
-                </div>
-                <CardTitle className="text-lg text-white group-hover:text-blue-300 transition-colors">
-                  {app.name}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-0">
-                <p className="text-slate-300 text-sm mb-4 leading-relaxed">
-                  {app.description}
-                </p>
-                <Button
-                  asChild
-                  className="w-full bg-blue-600 hover:bg-blue-500 text-white border-0 group-hover:bg-blue-500 transition-all duration-300"
+        {/* Horizontal Carousel for Random Selection */}
+        <div className="mb-12 overflow-hidden">
+          <div 
+            ref={carouselRef}
+            className="flex gap-4 overflow-x-auto scrollbar-hide pb-4"
+            style={{ 
+              scrollBehavior: isSpinning ? 'auto' : 'smooth',
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none'
+            }}
+          >
+            {/* Repeat projects multiple times for seamless scrolling */}
+            {[...Array(5)].map((_, cycleIndex) => 
+              uselessApps.map((app, index) => (
+                <div
+                  key={`${cycleIndex}-${index}`}
+                  className={`flex-shrink-0 w-48 transition-all duration-500 ${
+                    selectedProject && selectedProject.name === app.name && !isSpinning
+                      ? 'transform scale-110 project-glow ring-4 ring-white/90 ring-offset-4 ring-offset-slate-900'
+                      : selectedProject && selectedProject.name !== app.name && !isSpinning
+                      ? 'opacity-30'
+                      : 'opacity-100'
+                  }`}
                 >
-                  <a href={app.path}>Launch App</a>
-                </Button>
-              </CardContent>
-            </Card>
-          ))}
+                  <Card className="bg-slate-800/40 border-slate-700/50 hover:border-blue-500/50 backdrop-blur-sm cursor-pointer">
+                    <CardContent className="p-4 text-center">
+                      <div className="text-4xl mb-2">{app.icon}</div>
+                      <div className="text-white font-medium text-sm">{app.name}</div>
+                      <div className="text-slate-400 text-xs mt-1">{app.category}</div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
         <div className="text-center mt-16 space-y-4">
